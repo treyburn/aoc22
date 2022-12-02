@@ -7,14 +7,14 @@ import (
 )
 
 func main() {
-	game := day_two.BuildStrategy(day_two.InputData, day_two.InitialRules)
+	game := day_two.BuildMoves(day_two.InputData, day_two.InitialStrategy)
 
 	score := day_two.Score(game)
 
 	fmt.Println("Your score: ", score.YourScore)
 	fmt.Println("Opponents score: ", score.OpponentScore)
 
-	fixedGame := day_two.BuildStrategy(day_two.InputData, day_two.FixedRules)
+	fixedGame := day_two.BuildMoves(day_two.InputData, day_two.FixedStrategy)
 
 	fixedScore := day_two.Score(fixedGame)
 

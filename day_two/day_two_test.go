@@ -10,25 +10,25 @@ func TestBuildStrategy_Initial(t *testing.T) {
 	type testCase struct {
 		name  string
 		input string
-		want  []Strategy
+		want  []MoveSet
 	}
 
 	var tests = []testCase{
 		{"standard",
 			"A Y\nB X\nC Z",
-			[]Strategy{
+			[]MoveSet{
 				{rock, paper},
 				{paper, rock},
 				{scissors, scissors}}},
-		{"empty", "", []Strategy{}},
-		{"bad values", "T K\nI S", []Strategy{}},
-		{"mixed values", "A Z\nI S\nT K", []Strategy{{rock, scissors}}},
+		{"empty", "", []MoveSet{}},
+		{"bad values", "T K\nI S", []MoveSet{}},
+		{"mixed values", "A Z\nI S\nT K", []MoveSet{{rock, scissors}}},
 	}
 
 	for _, test := range tests {
 		tc := test
 		t.Run(tc.name, func(t *testing.T) {
-			got := BuildStrategy(tc.input, InitialRules)
+			got := BuildMoves(tc.input, InitialStrategy)
 
 			assert.Equal(t, tc.want, got)
 		})
@@ -39,13 +39,13 @@ func TestBuildStrategy_Fixed(t *testing.T) {
 	type testCase struct {
 		name  string
 		input string
-		want  []Strategy
+		want  []MoveSet
 	}
 
 	var tests = []testCase{
 		{"standard",
 			"A Y\nB X\nC Z",
-			[]Strategy{
+			[]MoveSet{
 				{rock, rock},
 				{paper, rock},
 				{scissors, rock}}},
@@ -54,7 +54,7 @@ func TestBuildStrategy_Fixed(t *testing.T) {
 	for _, test := range tests {
 		tc := test
 		t.Run(tc.name, func(t *testing.T) {
-			got := BuildStrategy(tc.input, FixedRules)
+			got := BuildMoves(tc.input, FixedStrategy)
 
 			assert.Equal(t, tc.want, got)
 		})
@@ -64,14 +64,14 @@ func TestBuildStrategy_Fixed(t *testing.T) {
 func TestDetermineWinner(t *testing.T) {
 	type testCase struct {
 		name  string
-		input Strategy
+		input MoveSet
 		want  Outcome
 	}
 
 	var tests = []testCase{
-		{"you win", Strategy{rock, paper}, win},
-		{"you lose", Strategy{rock, scissors}, lost},
-		{"you draw", Strategy{rock, rock}, draw},
+		{"you win", MoveSet{rock, paper}, win},
+		{"you lose", MoveSet{rock, scissors}, lost},
+		{"you draw", MoveSet{rock, rock}, draw},
 	}
 
 	for _, test := range tests {
@@ -87,12 +87,12 @@ func TestDetermineWinner(t *testing.T) {
 func TestScore(t *testing.T) {
 	type testCase struct {
 		name  string
-		input []Strategy
+		input []MoveSet
 		want  GameScore
 	}
 
 	var tests = []testCase{
-		{"standard", []Strategy{
+		{"standard", []MoveSet{
 			{rock, paper},
 			{paper, rock},
 			{scissors, scissors}}, GameScore{1 + 0 + 2 + 6 + 3 + 3, 15}},
@@ -125,7 +125,7 @@ func TestScore_FixedStrategy(t *testing.T) {
 	for _, test := range tests {
 		tc := test
 		t.Run(tc.name, func(t *testing.T) {
-			strat := BuildStrategy(tc.input, FixedRules)
+			strat := BuildMoves(tc.input, FixedStrategy)
 
 			got := Score(strat)
 

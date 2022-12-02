@@ -54,26 +54,27 @@ var requiredOutcome = map[string]Outcome{
 	"Z": win,
 }
 
-type Strategy struct {
+type MoveSet struct {
 	OpponentsMove Move
 	YourMove      Move
 }
 
-type Ruleset func(string, string) (Strategy, error)
+type Strategy func(string, string) (MoveSet, error)
 
 type GameScore struct {
 	OpponentScore int
 	YourScore     int
 }
 
-func BuildStrategy(input string, rule Ruleset) []Strategy {
-	moves := make([]Strategy, 0)
+// BuildMoves takes a newline separated string of space separated instructions and builds a MoveSet based on the provided Strategy
+func BuildMoves(input string, build Strategy) []MoveSet {
+	moves := make([]MoveSet, 0)
 	lines := strings.Split(input, "\n")
 	for idx, pair := range lines {
 		if pair != "" {
 			ops := strings.Split(pair, " ")
 			if len(ops) == 2 {
-				strat, err := rule(ops[0], ops[1])
+				strat, err := build(ops[0], ops[1])
 				if err != nil {
 					fmt.Println(fmt.Sprintf("Error on line %v with values %v: %v", idx, pair, err))
 					continue
@@ -90,38 +91,41 @@ func BuildStrategy(input string, rule Ruleset) []Strategy {
 	return moves
 }
 
-func InitialRules(first, second string) (Strategy, error) {
+// InitialStrategy builds a MoveSet where first is the opponents Move and second is your Move
+func InitialStrategy(first, second string) (MoveSet, error) {
 	oOp, ok := initialDecode[strings.ToUpper(first)]
 	if !ok {
-		return Strategy{}, fmt.Errorf("unexpected value: %v", first)
+		return MoveSet{}, fmt.Errorf("unexpected value: %v", first)
 	}
 	yOp, ok := initialDecode[strings.ToUpper(second)]
 	if !ok {
-		return Strategy{}, fmt.Errorf("unexpected value: %v", second)
+		return MoveSet{}, fmt.Errorf("unexpected value: %v", second)
 	}
 
-	return Strategy{
+	return MoveSet{
 		OpponentsMove: oOp,
 		YourMove:      yOp,
 	}, nil
 }
 
-func FixedRules(first, second string) (Strategy, error) {
+// FixedStrategy builds a MoveSet where first is the opponents Move and second is the desired Outcome for you
+func FixedStrategy(first, second string) (MoveSet, error) {
 	oOp, ok := initialDecode[strings.ToUpper(first)]
 	if !ok {
-		return Strategy{}, fmt.Errorf("unexpected value: %v", first)
+		return MoveSet{}, fmt.Errorf("unexpected value: %v", first)
 	}
 	outcome, ok := requiredOutcome[strings.ToUpper(second)]
 	if !ok {
-		return Strategy{}, fmt.Errorf("unexpected value: %v", second)
+		return MoveSet{}, fmt.Errorf("unexpected value: %v", second)
 	}
 
 	yOp := fixOutcome(oOp, outcome)
 
-	return Strategy{OpponentsMove: oOp, YourMove: yOp}, nil
+	return MoveSet{OpponentsMove: oOp, YourMove: yOp}, nil
 }
 
-func Score(moves []Strategy) GameScore {
+// Score gives a GameScore based on a series of MoveSets
+func Score(moves []MoveSet) GameScore {
 	score := GameScore{}
 
 	for _, round := range moves {
@@ -134,7 +138,7 @@ func Score(moves []Strategy) GameScore {
 }
 
 // determineYourOutcome determines the win/draw/lost Outcome of a strategy from "your" perspective
-func determineYourOutcome(s Strategy) Outcome {
+func determineYourOutcome(s MoveSet) Outcome {
 	opponentWins := beats[s.OpponentsMove]
 
 	switch s.YourMove {
@@ -147,6 +151,7 @@ func determineYourOutcome(s Strategy) Outcome {
 	}
 }
 
+// fixOutcome gives "you" the appropriate Move based on your opponents Move and the required Outcome
 func fixOutcome(opponent Move, required Outcome) Move {
 	switch required {
 	case win:
