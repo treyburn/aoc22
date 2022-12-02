@@ -42,8 +42,8 @@ func TestFindHighestCalorie(t *testing.T) {
 	}
 
 	for _, test := range testData {
-		t.Run(test.name, func(t *testing.T) {
-			tc := test
+		tc := test
+		t.Run(tc.name, func(t *testing.T) {
 			got := FindHighestCalorie(tc.data)
 
 			assert.Equal(t, tc.want, got)
@@ -66,8 +66,8 @@ func TestSumTop3Calories(t *testing.T) {
 	}
 
 	for _, test := range testData {
-		t.Run(test.name, func(t *testing.T) {
-			tc := test
+		tc := test
+		t.Run(tc.name, func(t *testing.T) {
 			got := SumTop3Calories(tc.data)
 
 			assert.Equal(t, tc.want, got)
