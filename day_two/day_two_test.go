@@ -28,7 +28,7 @@ func TestBuildStrategy_Initial(t *testing.T) {
 	for _, test := range tests {
 		tc := test
 		t.Run(tc.name, func(t *testing.T) {
-			got := BuildStrategy(tc.input, InitialStrategy)
+			got := BuildStrategy(tc.input, InitialRules)
 
 			assert.Equal(t, tc.want, got)
 		})
@@ -54,7 +54,7 @@ func TestBuildStrategy_Fixed(t *testing.T) {
 	for _, test := range tests {
 		tc := test
 		t.Run(tc.name, func(t *testing.T) {
-			got := BuildStrategy(tc.input, FixedStrategy)
+			got := BuildStrategy(tc.input, FixedRules)
 
 			assert.Equal(t, tc.want, got)
 		})
@@ -125,7 +125,7 @@ func TestScore_FixedStrategy(t *testing.T) {
 	for _, test := range tests {
 		tc := test
 		t.Run(tc.name, func(t *testing.T) {
-			strat := BuildStrategy(tc.input, FixedStrategy)
+			strat := BuildStrategy(tc.input, FixedRules)
 
 			got := Score(strat)
 

@@ -90,7 +90,7 @@ func BuildStrategy(input string, rule Ruleset) []Strategy {
 	return moves
 }
 
-func InitialStrategy(first, second string) (Strategy, error) {
+func InitialRules(first, second string) (Strategy, error) {
 	oOp, ok := initialDecode[strings.ToUpper(first)]
 	if !ok {
 		return Strategy{}, fmt.Errorf("unexpected value: %v", first)
@@ -106,7 +106,7 @@ func InitialStrategy(first, second string) (Strategy, error) {
 	}, nil
 }
 
-func FixedStrategy(first, second string) (Strategy, error) {
+func FixedRules(first, second string) (Strategy, error) {
 	oOp, ok := initialDecode[strings.ToUpper(first)]
 	if !ok {
 		return Strategy{}, fmt.Errorf("unexpected value: %v", first)
