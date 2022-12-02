@@ -59,7 +59,7 @@ type MoveSet struct {
 	YourMove      Move
 }
 
-type Strategy func(string, string) (MoveSet, error)
+type Strategy func(opponent, you string) (MoveSet, error)
 
 type GameScore struct {
 	OpponentScore int
