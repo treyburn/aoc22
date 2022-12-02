@@ -91,15 +91,15 @@ func BuildMoves(input string, build Strategy) []MoveSet {
 	return moves
 }
 
-// InitialStrategy builds a MoveSet where first is the opponents Move and second is your Move
-func InitialStrategy(first, second string) (MoveSet, error) {
-	oOp, ok := initialDecode[strings.ToUpper(first)]
+// InitialStrategy builds a MoveSet based on the initially assumed code
+func InitialStrategy(opponent, you string) (MoveSet, error) {
+	oOp, ok := initialDecode[strings.ToUpper(opponent)]
 	if !ok {
-		return MoveSet{}, fmt.Errorf("unexpected value: %v", first)
+		return MoveSet{}, fmt.Errorf("unexpected value: %v", opponent)
 	}
-	yOp, ok := initialDecode[strings.ToUpper(second)]
+	yOp, ok := initialDecode[strings.ToUpper(you)]
 	if !ok {
-		return MoveSet{}, fmt.Errorf("unexpected value: %v", second)
+		return MoveSet{}, fmt.Errorf("unexpected value: %v", you)
 	}
 
 	return MoveSet{
@@ -108,15 +108,15 @@ func InitialStrategy(first, second string) (MoveSet, error) {
 	}, nil
 }
 
-// FixedStrategy builds a MoveSet where first is the opponents Move and second is the desired Outcome for you
-func FixedStrategy(first, second string) (MoveSet, error) {
-	oOp, ok := initialDecode[strings.ToUpper(first)]
+// FixedStrategy builds a MoveSet where your move is determined by a desired Outcome from the opponents Move
+func FixedStrategy(opponent, you string) (MoveSet, error) {
+	oOp, ok := initialDecode[strings.ToUpper(opponent)]
 	if !ok {
-		return MoveSet{}, fmt.Errorf("unexpected value: %v", first)
+		return MoveSet{}, fmt.Errorf("unexpected value: %v", opponent)
 	}
-	outcome, ok := requiredOutcome[strings.ToUpper(second)]
+	outcome, ok := requiredOutcome[strings.ToUpper(you)]
 	if !ok {
-		return MoveSet{}, fmt.Errorf("unexpected value: %v", second)
+		return MoveSet{}, fmt.Errorf("unexpected value: %v", you)
 	}
 
 	yOp := fixOutcome(oOp, outcome)
