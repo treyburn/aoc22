@@ -93,24 +93,24 @@ func BuildMoves(input string, build Strategy) []MoveSet {
 
 // InitialStrategy builds a MoveSet based on the initially assumed code
 func InitialStrategy(opponent, you string) (MoveSet, error) {
-	oOp, ok := initialDecode[strings.ToUpper(opponent)]
+	opMove, ok := initialDecode[strings.ToUpper(opponent)]
 	if !ok {
 		return MoveSet{}, fmt.Errorf("unexpected value: %v", opponent)
 	}
-	yOp, ok := initialDecode[strings.ToUpper(you)]
+	yourMove, ok := initialDecode[strings.ToUpper(you)]
 	if !ok {
 		return MoveSet{}, fmt.Errorf("unexpected value: %v", you)
 	}
 
 	return MoveSet{
-		OpponentsMove: oOp,
-		YourMove:      yOp,
+		OpponentsMove: opMove,
+		YourMove:      yourMove,
 	}, nil
 }
 
 // FixedStrategy builds a MoveSet where your move is determined by a desired Outcome from the opponents Move
 func FixedStrategy(opponent, you string) (MoveSet, error) {
-	oOp, ok := initialDecode[strings.ToUpper(opponent)]
+	opMove, ok := initialDecode[strings.ToUpper(opponent)]
 	if !ok {
 		return MoveSet{}, fmt.Errorf("unexpected value: %v", opponent)
 	}
@@ -119,9 +119,9 @@ func FixedStrategy(opponent, you string) (MoveSet, error) {
 		return MoveSet{}, fmt.Errorf("unexpected value: %v", you)
 	}
 
-	yOp := fixOutcome(oOp, outcome)
+	yourMove := fixOutcome(opMove, outcome)
 
-	return MoveSet{OpponentsMove: oOp, YourMove: yOp}, nil
+	return MoveSet{OpponentsMove: opMove, YourMove: yourMove}, nil
 }
 
 // Score gives a GameScore based on a series of MoveSets
