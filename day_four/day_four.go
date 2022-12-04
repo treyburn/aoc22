@@ -24,8 +24,10 @@ func (sp SectorPair) HasOverlap() bool {
 }
 
 func (sp SectorPair) HasFullOverlap() bool {
-	return (sp.first.lowerBound <= sp.second.lowerBound && sp.first.upperBound >= sp.second.upperBound) ||
-		(sp.second.lowerBound <= sp.first.lowerBound && sp.second.upperBound >= sp.first.upperBound)
+	return (isBetween(sp.first.lowerBound, sp.first.upperBound, sp.second.lowerBound) &&
+		isBetween(sp.first.lowerBound, sp.first.upperBound, sp.second.upperBound)) ||
+		(isBetween(sp.second.lowerBound, sp.second.upperBound, sp.first.lowerBound) &&
+			isBetween(sp.second.lowerBound, sp.second.upperBound, sp.first.upperBound))
 }
 
 // buildSector takes a string in the format of `X-Y` and outputs a Sector struct
