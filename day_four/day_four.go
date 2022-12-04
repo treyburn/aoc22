@@ -16,6 +16,7 @@ type SectorPair struct {
 	second Sector
 }
 
+// HasOverlap returns true if the lower/upper bounds of either sector overlap
 func (sp SectorPair) HasOverlap() bool {
 	return isBetween(sp.first.lowerBound, sp.first.upperBound, sp.second.lowerBound) ||
 		isBetween(sp.first.lowerBound, sp.first.upperBound, sp.second.upperBound) ||
@@ -23,6 +24,7 @@ func (sp SectorPair) HasOverlap() bool {
 		isBetween(sp.second.lowerBound, sp.second.upperBound, sp.first.upperBound)
 }
 
+// HasFullOverlap returns true if the lower/upper bounds of any sector is fully overlapped by the other
 func (sp SectorPair) HasFullOverlap() bool {
 	return (isBetween(sp.first.lowerBound, sp.first.upperBound, sp.second.lowerBound) &&
 		isBetween(sp.first.lowerBound, sp.first.upperBound, sp.second.upperBound)) ||
