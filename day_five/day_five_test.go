@@ -103,7 +103,7 @@ func TestMakeInitialQueues(t *testing.T) {
 
 	wantLen := 3
 
-	queues, err := MakeInitialQueues(testData, wantLen)
+	queues, err := makeInitialQueues(testData, wantLen)
 	assert.NoError(t, err)
 
 	assert.Equal(t, wantLen, len(queues))
@@ -169,7 +169,7 @@ func TestProcessMoves(t *testing.T) {
 	testData := strings.Split(rawInput, "\n")
 	dataLen := 3
 
-	queues, err := MakeInitialQueues(testData, dataLen)
+	queues, err := makeInitialQueues(testData, dataLen)
 	require.NoError(t, err)
 
 	move, err := parseMoves("move 1 from 2 to 1")
@@ -191,7 +191,7 @@ func TestProcessMoves_Multiple(t *testing.T) {
 	testData := strings.Split(rawInput, "\n")
 	dataLen := 3
 
-	queues, err := MakeInitialQueues(testData, dataLen)
+	queues, err := makeInitialQueues(testData, dataLen)
 	require.NoError(t, err)
 
 	move, err := parseMoves("move 1 from 2 to 1")
@@ -236,7 +236,7 @@ func TestProcessMovesUpdated(t *testing.T) {
 	testData := strings.Split(rawInput, "\n")
 	dataLen := 3
 
-	queues, err := MakeInitialQueues(testData, dataLen)
+	queues, err := makeInitialQueues(testData, dataLen)
 	require.NoError(t, err)
 
 	move, err := parseMoves("move 1 from 2 to 1")

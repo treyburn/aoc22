@@ -28,6 +28,7 @@ func (n *Node) PopNext() *Node {
 	return next
 }
 
+// Last gets the last Node in the linked list
 func (n *Node) Last() *Node {
 	if n.next != nil {
 		return n.next.Last()
@@ -35,6 +36,9 @@ func (n *Node) Last() *Node {
 	return n
 }
 
+// Pop removed the Node from the linked list
+//
+//	Note that this is not a traditional linked list pop method and would fragment a list if used in the middle
 func (n *Node) Pop() *Node {
 	if n.prev != nil {
 		n.prev.next = nil
@@ -49,6 +53,7 @@ func (n *Node) Pop() *Node {
 	return n
 }
 
+// Value is a helper to convert rune to string char for convenience
 func (n *Node) Value() string {
 	return string(n.value)
 }
@@ -72,6 +77,9 @@ func NewQueue() *Queue {
 }
 
 // Enqueue adds the linked Node(s) to the front of the queue
+//
+//	Example: add A-B-C to queue of head-D-E-F-tail
+//	result is: head-A-B-C-D-E-F-tail
 func (q *Queue) Enqueue(n *Node) {
 	last := n.Last()
 	next := q.head.next
@@ -81,6 +89,10 @@ func (q *Queue) Enqueue(n *Node) {
 	q.head.next = n
 }
 
+// ReverseEnqueue reverses the linked list Node(s) and adds to the front of the queue
+//
+//	Example: add A-B-C to queue of head-D-E-F-tail
+//	result is: head-C-B-A-D-E-F-tail
 func (q *Queue) ReverseEnqueue(n *Node) {
 	curr := n
 	for curr.next != nil {
@@ -95,8 +107,7 @@ func (q *Queue) ReverseEnqueue(n *Node) {
 }
 
 // Dequeue will return up to the requested number of linked Node(s) from the front of the queue
-//
-//	or less if the requested count cannot be satisfied due to insufficient queue length
+// or less if the requested count cannot be satisfied due to insufficient queue length
 func (q *Queue) Dequeue(count int) *Node {
 	if count <= 0 {
 		return nil
@@ -118,12 +129,17 @@ func (q *Queue) Dequeue(count int) *Node {
 		q.head.next = q.tail
 	}
 
-	// remove ref to
+	// remove ref to head
 	next.prev = nil
 
 	return next
 }
 
+// AddToBack is essentially a LIFO mechanism to make it easier to construct our queue
+// from the starting diagram
+//
+//	Example: add A-B-C to back of queue with head-D-E-F-tail
+//	Result: head-D-E-F-A-B-C-tail
 func (q *Queue) AddToBack(n *Node) {
 	last := n.Last()
 	oldLast := q.tail.prev
